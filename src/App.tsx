@@ -31,7 +31,7 @@ function App() {
     if (pdfExportComponent.current) {
       pdfExportComponent.current.save();
     }
-  };
+  }; 
 
   //Paging
   const [page, setPage] = React.useState<PageState>(initialDataState);
