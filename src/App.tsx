@@ -39,8 +39,6 @@ function App() {
     }
   };
 
-  
-
   //Paging
   const [page, setPage] = React.useState<PageState>(initialDataState);
   const [pageSizeValue, setPageSizeValue] = React.useState<
@@ -108,15 +106,25 @@ function App() {
   return (
     <div className="App">
       <div className="example-config">
-        <button
+       {
+        pdfBase64 ? (
+          <button
+          className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"
+          onClick={()=>setPdfBase64(null)}>
+            Go Back
+          </button>
+        ) : (
+          <button
           className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"
           onClick={exportPDFWithComponent}
         >
           Export with component
         </button>
+        )
+       }
       </div>
       {pdfBase64 ? (
-        <PDFViewer data={pdfBase64} style={{height:"500px"}}/>
+        <PDFViewer data={pdfBase64} style={{height:"auto"}}/>
       ) : (
         <PDFExport
           ref={pdfExportComponent}
