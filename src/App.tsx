@@ -10,6 +10,8 @@ import {
 import { PagerTargetEvent } from "@progress/kendo-react-data-tools";
 import { PDFViewer } from "@progress/kendo-react-pdf-viewer";
 import jsPDF from "jspdf";
+import { GridPDFExport } from "@progress/kendo-react-pdf";
+import { GridToolbar } from "@progress/kendo-react-grid";
 
 const initialDataState: PageState = { skip: 0, take: 5 };
 
@@ -17,25 +19,33 @@ function App() {
   const [customerData, setCustomerData] = useState<Record[] | null | undefined>(
     null
   );
-  const [pdfBase64, setPdfBase64] = useState<string | null>(null);
+  // const [pdfBase64, setPdfBase64] = useState<string | null>(null);
 
-  // PDF Export
-  const pdfExportComponent = React.useRef<PDFExport>(null);
+  // // PDF Export
+  // const pdfExportComponent = React.useRef<PDFExport>(null);
 
-  const exportPDFWithComponent = () => {
-    if (pdfExportComponent.current) {
-      const pdfDoc = new jsPDF();
+  // const exportPDFWithComponent = () => {
+  //   if (pdfExportComponent.current) {
+  //     const pdfDoc = new jsPDF();
       
-      // Generate base64 representation
-      const base64 = pdfDoc.output("dataurlstring");
+  //     // Generate base64 representation
+  //     const base64 = pdfDoc.output("dataurlstring");
       
-      // Convert binary data to Base64
-      const uint8Array = new Uint8Array(base64.split(',').map(Number));
-      const byteArray = Array.from(uint8Array);
-      const base64Data = btoa(String.fromCharCode.apply(null, byteArray));
+  //     // Convert binary data to Base64
+  //     const uint8Array = new Uint8Array(base64.split(',').map(Number));
+  //     const byteArray = Array.from(uint8Array);
+  //     const base64Data = btoa(String.fromCharCode.apply(null, byteArray));
       
-      // Do something with the base64 data, e.g., set it in the state
-      setPdfBase64(base64Data);
+  //     // Do something with the base64 data, e.g., set it in the state
+  //     setPdfBase64(base64Data);
+  //   }
+  // };
+
+  //Export PDF
+  let gridPDFExport: any;
+  const exportPDF = () => {
+    if (gridPDFExport !== null) {
+      gridPDFExport.save();
     }
   };
 
@@ -85,6 +95,15 @@ function App() {
       }}
       onPageChange={pageChange}
     >
+      <GridToolbar>
+        <button
+          title="Export PDF"
+          className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary"
+          onClick={exportPDF}
+        >
+          Export PDF
+        </button>
+      </GridToolbar>
       <Column field="Address1" title="Address" width="150px" />
       <Column field="City" title="City" width="100px" />
       <Column field="Department" title="Department" />
@@ -105,7 +124,7 @@ function App() {
 
   return (
     <div className="App">
-      <div className="example-config">
+      {/* <div className="example-config">
        {
         pdfBase64 ? (
           <button
@@ -118,7 +137,7 @@ function App() {
           className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"
           onClick={exportPDFWithComponent}
         >
-          Export with component
+          Export PDF
         </button>
         )
        }
@@ -135,7 +154,13 @@ function App() {
         >
           {grid}
         </PDFExport>
-      )}
+      )} */}
+       <div>
+      {grid}
+      <GridPDFExport ref={(pdfExport) => (gridPDFExport = pdfExport)}>
+        {grid}
+      </GridPDFExport>
+    </div>
     </div>
   );
 }
